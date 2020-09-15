@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Getting Started: Serving Web Content</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-router@2.1.2/dist/vue-router.js"></script>
+  <script src="index.js"></script>
+  <link rel="stylesheet" type="text/css" href="index.css" />
+</head>
+
+<body>
+  <div id="app">
+    <div class="sidenav">
+      <div class="userArea">
+        <span class="usericon"></span>
+        <button class="normalbtn" v-on:click="openModal()">Login</button>
+        <button class="normalbtn">Sign Up</button>
+      </div>
+      <a href="">To-dos</a>
+      <a href="">Completed</a>
+      <a href=""><span class="dot normal"></span>Grey</a>
+      <a href=""><span class="dot red"></span>Red</a>
+      <a href=""><span class="dot yellow"></span>Yellow</a>
+      <a href=""><span class="dot purple"></span>Purple</a>
+      <a href=""><span class="dot blue"></span>Blue</a>
+    </div>
+    <div class="main">
+      <h1 class="title">My To-Do List</h1>
+      <div class="todo">
+        <div class="user-input">
+          <input type="text" v-model="newTodoText" placeholder="Add new To-Do" class="todo-input" />
+          <button class="add" v-on:click="add" v-if = "newTodoText != '' "> + </button>
+        </div>
+        <div class="color">
+          <span class="dot normal"></span>
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot purple"></span>
+          <span class="dot blue"></span>
+        </div>
+        <div v-if="incompleteCount > 0"> You have {{incompleteCount}} pending items</div>
+        <ul class="todo-list" v-if="!(incompleteCount === 0 )">
+          <todo-item v-for="(todo, key, index) in list" :todo="todo" :index="key" v-bind:key="todo.id" class="todo-item"
+            v-on:remove="del(key)"></todo-item>
+        </ul>
+        <div v-if="!(completedCount === 0 )&& !hided">Completed task :{{(completedCount/allCount).toFixed(2)*100}} %
+        </div>
+        <ul class="todo-list" v-if="(completedCount >  0 )|| !hided ">
+          <todo-item v-for="(todo, key, index) in clist" :todo="todo" :index="key" v-bind:key="todo.id"
+            class="todo-item" v-on:remove="del(key)"></todo-item>
+        </ul>
+        <div v-if="allCount === 0">You have no To-Dos</div>
+        <div class="control">
+          <button v-if= "completedCount > 0 && hided" v-on:click="hide"> show Completed</button>
+          <button v-if= "completedCount > 0 && !hided" v-on:click="hide"> Hide Completed</button>
+          <button v-on:click='clearAll'>Clear All</button>
+        </div>
+      </div>
+    </div>
+    <login-modal id="modal" v-if="loginModal"/>
+  </div>
+
+</body>
+
+</html>
